@@ -64,7 +64,22 @@ const Upload = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const currentUser = JSON.parse(localStorage.getItem('currentUser')); // ✅ consistent key
+    const currentUser = JSON.parse(localStorage.getItem('currentUser')); 
+
+    if (!form.title.trim()) {
+      toast.error("Title is required!"); 
+    }
+
+    if (form.type === "upload" && !form.videoFile) {
+      toast.error("Please upload a video file!");
+      return;
+    }
+
+    if (form.type === "link" && !form.videoLink.trim()) {
+      toast.error("Please provide a video link!");
+      return;
+    }
+    // 🔹 End of Added Validation
 
     const videoData = {
       id: uuidv4(),
@@ -78,7 +93,7 @@ const Upload = () => {
           : form.videoLink.startsWith('http')
           ? form.videoLink
           : `https://${form.videoLink}`,
-      uploadedBy: currentUser?.name || 'Anonymous', // ✅ consistent field
+      uploadedBy: currentUser?.name || 'Anonymous', 
       uploadedAt: new Date().toISOString(),
     };
 
